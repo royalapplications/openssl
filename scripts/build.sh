@@ -4,7 +4,7 @@ set -e
 
 OPENSSL_VERSION_LTS="3.2.1" # https://www.openssl.org/source/index.html
 IOS_VERSION_MIN="13.4"
-MACOS_VERSION_MIN="13.4"
+MACOS_VERSION_MIN="11.0"
 
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 echo "Script Path: ${SCRIPT_PATH}"
