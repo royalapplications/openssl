@@ -2,7 +2,7 @@
 
 set -e
 
-OPENSSL_VERSION_LTS="3.2.1" # https://www.openssl.org/source/index.html
+OPENSSL_VERSION_STABLE="3.2.1" # https://www.openssl.org/source/index.html
 IOS_VERSION_MIN="13.4"
 MACOS_VERSION_MIN="11.0"
 
@@ -14,8 +14,8 @@ echo "Build Path: ${BUILD_ROOT_DIR}"
 mkdir -p "${BUILD_ROOT_DIR}"
 
 if [[ -z $OPENSSL_VERSION ]]; then
-  echo "OPENSSL_VERSION not set; falling back to ${OPENSSL_VERSION_LTS} (LTS)"
-  OPENSSL_VERSION="${OPENSSL_VERSION_LTS}"
+  echo "OPENSSL_VERSION not set; falling back to ${OPENSSL_VERSION_STABLE} (Stable)"
+  OPENSSL_VERSION="${OPENSSL_VERSION_STABLE}"
 fi
 
 if [[ ! -f "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz" ]]; then
