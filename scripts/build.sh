@@ -77,7 +77,7 @@ fi
 
 if [[ ! -d "${BUILD_DIR}/build/macosx" ]]; then
   pushd "${BUILD_DIR}"
-  ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared darwin64-$FOREIGN_ARC-cc CFLAGS="-arch ${FOREIGN_ARC} ${NATIVE_BUILD_FLAGS}"
+  ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-shared darwin64-$FOREIGN_ARC-cc CFLAGS="-arch ${FOREIGN_ARC} ${NATIVE_BUILD_FLAGS}"
   make clean
   make -j$THREAD_COUNT
   mkdir "${BUILD_DIR}/build/macosx"
