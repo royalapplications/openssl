@@ -52,6 +52,7 @@ jobs:
           build/openssl-${{ env.OPENSSL_VERSION }}/build/iphoneos/**
           build/openssl-${{ env.OPENSSL_VERSION }}/build/iphonesimulator/**
           build/openssl-${{ env.OPENSSL_VERSION }}/build/macosx/**
+          build/openssl-${{ env.OPENSSL_VERSION }}/build/OpenSSL.xcframework
 
     - name: cache
       if: steps.cache-openssl-src.outputs.cache-hit != 'true'
