@@ -5,6 +5,7 @@ set -e
 OPENSSL_VERSION_STABLE="3.2.1" # https://www.openssl.org/source/index.html
 IOS_VERSION_MIN="13.4"
 MACOS_VERSION_MIN="11.0"
+CODESIGN_ID="-"
 
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 echo "Script Path: ${SCRIPT_PATH}"
@@ -86,6 +87,7 @@ if [[ ! -d "${BUILD_DIR}/build/macosx" ]]; then
   cp -r "${BUILD_DIR}/build/include/openssl" "${BUILD_DIR}/build/macosx/include/OpenSSL"
   lipo -create "${BUILD_DIR}/build/lib/libssl.a"    libssl.a    -output "${BUILD_DIR}/build/macosx/lib/libssl.a"
   lipo -create "${BUILD_DIR}/build/lib/libcrypto.a" libcrypto.a -output "${BUILD_DIR}/build/macosx/lib/libcrypto.a"
+  xcrun libtool -static -o "${BUILD_DIR}/build/macosx/lib/libOpenSSL.a" "${BUILD_DIR}/build/macosx/lib/libcrypto.a" "${BUILD_DIR}/build/macosx/lib/libssl.a"
   make clean
   popd
 fi
@@ -99,6 +101,7 @@ if [[ ! -d "${BUILD_DIR}/build/iphonesimulator" ]]; then
   cp -r "${BUILD_DIR}/build/include/openssl" "${BUILD_DIR}/build/iphonesimulator/include/OpenSSL"
   lipo -create "${BUILD_DIR}/build/iphonesimulator-x86_64/libssl.a"    "${BUILD_DIR}/build/iphonesimulator-arm64/libssl.a"    -output "${BUILD_DIR}/build/iphonesimulator/lib/libssl.a"
   lipo -create "${BUILD_DIR}/build/iphonesimulator-x86_64/libcrypto.a" "${BUILD_DIR}/build/iphonesimulator-arm64/libcrypto.a" -output "${BUILD_DIR}/build/iphonesimulator/lib/libcrypto.a"
+  xcrun libtool -static -o "${BUILD_DIR}/build/iphonesimulator/lib/libOpenSSL.a" "${BUILD_DIR}/build/iphonesimulator/lib/libcrypto.a" "${BUILD_DIR}/build/iphonesimulator/lib/libssl.a"
   rm -rf "${BUILD_DIR}/build/iphonesimulator-arm64"
   rm -rf "${BUILD_DIR}/build/iphonesimulator-x86_64"
 fi
@@ -114,6 +117,20 @@ if [[ ! -d "${BUILD_DIR}/build/iphoneos" ]]; then
   cp -r "${BUILD_DIR}/build/include/openssl" "${BUILD_DIR}/build/iphoneos/include/OpenSSL"
   cp libssl.a "${BUILD_DIR}/build/iphoneos/lib/"
   cp libcrypto.a "${BUILD_DIR}/build/iphoneos/lib/"
+  xcrun libtool -static -o "${BUILD_DIR}/build/iphoneos/lib/libOpenSSL.a" "${BUILD_DIR}/build/iphoneos/lib/libcrypto.a" "${BUILD_DIR}/build/iphoneos/lib/libssl.a"
   make clean
   popd
+fi
+
+if [[ ! -d "${BUILD_DIR}/build/OpenSSL.xcframework" ]]; then
+  xcodebuild -create-xcframework \
+    -library "${BUILD_DIR}/build/macosx/lib/libOpenSSL.a" -headers "${BUILD_DIR}/build/macosx/include/" \
+    -library "${BUILD_DIR}/build/iphonesimulator/lib/libOpenSSL.a" -headers "${BUILD_DIR}/build/iphonesimulator/include/" \
+    -library "${BUILD_DIR}/build/iphoneos/lib/libOpenSSL.a" -headers "${BUILD_DIR}/build/iphoneos/include/" \
+    -output "${BUILD_DIR}/build/OpenSSL.xcframework"
+
+  codesign \
+    --force --deep --strict \
+    --sign "${CODESIGN_ID}" \
+    "${BUILD_DIR}/build/OpenSSL.xcframework"
 fi
