@@ -32,15 +32,31 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
 
+    - name: restore cache
+      id: cache-openssl-src
+      uses: actions/cache/restore@v4
+      with:
+        key: "openssl-src-${{ env.OPENSSL_VERSION }}"
+        path: |
+          build/openssl-${{ env.OPENSSL_VERSION }}.tar.gz
+
     - name: run `build.sh`
       run: scripts/build.sh
 
     - name: publish artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: "OpenSSL ${{ env.OPENSSL_VERSION }}"
+        name: "openssl-${{ env.OPENSSL_VERSION }}"
         retention-days: 5
         path: |
           build/openssl-${{ env.OPENSSL_VERSION }}/build/iphoneos/**
           build/openssl-${{ env.OPENSSL_VERSION }}/build/iphonesimulator/**
           build/openssl-${{ env.OPENSSL_VERSION }}/build/macosx/**
+
+    - name: cache
+      if: steps.cache-openssl-src.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        key: ${{ steps.cache-openssl-src.cache-primary-key }}
+        path: |
+          build/openssl-${{ env.OPENSSL_VERSION }}.tar.gz
