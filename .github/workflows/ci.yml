@@ -29,6 +29,9 @@ jobs:
       OPENSSL_VERSION: "3.2.1"
 
     steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
     - name: run `build.sh`
       run: scripts/build.sh
 
