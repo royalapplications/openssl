@@ -124,9 +124,9 @@ fi
 
 if [[ ! -d "${BUILD_DIR}/build/OpenSSL.xcframework" ]]; then
   xcodebuild -create-xcframework \
-    -library "${BUILD_DIR}/build/macosx/lib/libOpenSSL.a" -headers "${BUILD_DIR}/build/macosx/include/" \
-    -library "${BUILD_DIR}/build/iphonesimulator/lib/libOpenSSL.a" -headers "${BUILD_DIR}/build/iphonesimulator/include/" \
-    -library "${BUILD_DIR}/build/iphoneos/lib/libOpenSSL.a" -headers "${BUILD_DIR}/build/iphoneos/include/" \
+    -library "${BUILD_DIR}/build/macosx/lib/libOpenSSL.a" \
+    -library "${BUILD_DIR}/build/iphonesimulator/lib/libOpenSSL.a" \
+    -library "${BUILD_DIR}/build/iphoneos/lib/libOpenSSL.a" \
     -output "${BUILD_DIR}/build/OpenSSL.xcframework"
 
   codesign \
