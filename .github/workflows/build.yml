@@ -71,11 +71,11 @@ jobs:
           build/openssl-${{ env.OPENSSL_VERSION }}/build/OpenSSL.xcframework
 
     - name: pack release artifacts
-      if: "success() && env.PUBLISH_RELEASE"
+      if: "success() && env.PUBLISH_RELEASE == '1'"
       run: scripts/release.sh
 
     - name: create release
-      if: "success() && env.PUBLISH_RELEASE"
+      if: "success() && env.PUBLISH_RELEASE == '1'"
       uses: softprops/action-gh-release@v2
       with:
         name: "${{ env.OPENSSL_VERSION }}"
