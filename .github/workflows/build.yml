@@ -48,7 +48,7 @@ jobs:
       if: "steps.cache-openssl-src.outputs.cache-hit != 'true'"
       uses: actions/cache/save@v4
       with:
-        key: "${{ steps.cache-openssl-src.cache-primary-key }}"
+        key: "${{ steps.cache-openssl-src.outputs.cache-primary-key }}"
         path: |
           build/openssl-${{ env.OPENSSL_VERSION }}.tar.gz
 
