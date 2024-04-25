@@ -76,7 +76,7 @@ jobs:
 
     - name: create release
       if: "success() && env.PUBLISH_RELEASE"
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         name: "${{ env.OPENSSL_VERSION }}"
         draft: true
