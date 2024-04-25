@@ -1,0 +1,88 @@
+name: Build
+on:
+  push:
+    tags:
+      - 'v3.*.*'
+    paths-ignore:
+      - '.github/workflows/x-*.yml'
+  workflow_dispatch: # manually-triggered runs
+
+permissions:
+  # allowed to create releases (ref. https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs)
+  contents: write
+
+concurrency:
+  # cancel pending runs when a PR gets updated (ref. https://github.com/rust-lang/rust/blob/75fd074338801fba74a8cf7f8c48c5c5be362d08/.github/workflows/ci.yml#L35)
+  group: ${{ github.head_ref || github.run_id }}-${{ github.actor }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-14
+
+    env: # use tag version, if available, falling back to 3.2.1 (stable)
+      OPENSSL_VERSION: "${{ startsWith(github.ref, 'refs/tags/v3') && github.ref_name || '3.2.1' }}"
+      PUBLISH_RELEASE: "${{ startsWith(github.ref, 'refs/tags/v3') && '1' || '0' }}"
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: restore cache
+      id: cache-openssl-src
+      uses: actions/cache/restore@v4
+      with:
+        key: "openssl-src-${{ env.OPENSSL_VERSION }}"
+        path: |
+          build/openssl-${{ env.OPENSSL_VERSION }}.tar.gz
+
+    - name: build
+      run: scripts/build.sh
+
+    - name: save cache
+      if: "steps.cache-openssl-src.outputs.cache-hit != 'true'"
+      uses: actions/cache/save@v4
+      with:
+        key: "${{ steps.cache-openssl-src.cache-primary-key }}"
+        path: |
+          build/openssl-${{ env.OPENSSL_VERSION }}.tar.gz
+
+    - name: publish native libraries
+      uses: actions/upload-artifact@v4
+      with:
+        name: "openssl-${{ env.OPENSSL_VERSION }}"
+        retention-days: 5
+        path: |
+          build/openssl-${{ env.OPENSSL_VERSION }}/build/iphoneos/**
+          build/openssl-${{ env.OPENSSL_VERSION }}/build/iphonesimulator/**
+          build/openssl-${{ env.OPENSSL_VERSION }}/build/macosx/**
+
+    - name: publish xcframework
+      uses: actions/upload-artifact@v4
+      with:
+        name: "openssl-${{ env.OPENSSL_VERSION }}.xcframework"
+        retention-days: 5
+        path: |
+          build/openssl-${{ env.OPENSSL_VERSION }}/build/OpenSSL.xcframework
+
+    - name: pack release artifacts
+      if: "success() && env.PUBLISH_RELEASE"
+      run: scripts/release.sh
+
+    - name: create release
+      if: "success() && env.PUBLISH_RELEASE"
+      uses: softprops/action-gh-release@v1
+        with:
+          name: "${{ env.OPENSSL_VERSION }}"
+          draft: true
+          prerelease: false
+          generate_release_notes: false
+          fail_on_unmatched_files: true
+          files: |
+            build/openssl-${{ env.OPENSSL_VERSION }}/build/openssl.tar.gz
+            build/openssl-${{ env.OPENSSL_VERSION }}/build/OpenSSL.xcframework.tar.gz
