@@ -77,12 +77,12 @@ jobs:
     - name: create release
       if: "success() && env.PUBLISH_RELEASE"
       uses: softprops/action-gh-release@v1
-        with:
-          name: "${{ env.OPENSSL_VERSION }}"
-          draft: true
-          prerelease: false
-          generate_release_notes: false
-          fail_on_unmatched_files: true
-          files: |
-            build/openssl-${{ env.OPENSSL_VERSION }}/build/openssl.tar.gz
-            build/openssl-${{ env.OPENSSL_VERSION }}/build/OpenSSL.xcframework.tar.gz
+      with:
+        name: "${{ env.OPENSSL_VERSION }}"
+        draft: true
+        prerelease: false
+        generate_release_notes: false
+        fail_on_unmatched_files: true
+        files: |
+          build/openssl-${{ env.OPENSSL_VERSION }}/build/openssl.tar.gz
+          build/openssl-${{ env.OPENSSL_VERSION }}/build/OpenSSL.xcframework.tar.gz
