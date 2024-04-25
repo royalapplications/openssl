@@ -47,7 +47,7 @@ build_sim_libs()
   local ARCH=$1
   if [[ ! -d "${BUILD_DIR}/build/iphonesimulator-${ARCH}" ]]; then
     pushd "${BUILD_DIR}"
-    ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared no-dso no-hw no-engine iossimulator-xcrun CFLAGS="-arch $ARCH -mios-simulator-version-min=${IOS_VERSION_MIN}"
+    ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared no-tests no-dso no-hw no-engine iossimulator-xcrun CFLAGS="-arch $ARCH -mios-simulator-version-min=${IOS_VERSION_MIN}"
     make clean
     make -j$THREAD_COUNT
     mkdir "${BUILD_DIR}/build/iphonesimulator-${ARCH}"
@@ -68,7 +68,7 @@ NATIVE_BUILD_FLAGS="-mmacosx-version-min=${MACOS_VERSION_MIN}"
 
 if [[ ! -d "${BUILD_DIR}/build/lib" ]]; then
   pushd "${BUILD_DIR}"
-  ./Configure --prefix="${BUILD_DIR}/build" --openssldir="${BUILD_DIR}/build/ssl" no-shared darwin64-$HOST_ARC-cc CFLAGS="${NATIVE_BUILD_FLAGS}"
+  ./Configure --prefix="${BUILD_DIR}/build" --openssldir="${BUILD_DIR}/build/ssl" no-shared no-tests darwin64-$HOST_ARC-cc CFLAGS="${NATIVE_BUILD_FLAGS}"
   make clean
   make -j$THREAD_COUNT
   make -j$THREAD_COUNT install_sw # skip man pages, see https://github.com/openssl/openssl/issues/8170#issuecomment-461122307
@@ -78,7 +78,7 @@ fi
 
 if [[ ! -d "${BUILD_DIR}/build/macosx" ]]; then
   pushd "${BUILD_DIR}"
-  ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-shared darwin64-$FOREIGN_ARC-cc CFLAGS="-arch ${FOREIGN_ARC} ${NATIVE_BUILD_FLAGS}"
+  ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-shared no-tests darwin64-$FOREIGN_ARC-cc CFLAGS="-arch ${FOREIGN_ARC} ${NATIVE_BUILD_FLAGS}"
   make clean
   make -j$THREAD_COUNT
   mkdir "${BUILD_DIR}/build/macosx"
@@ -108,7 +108,7 @@ fi
 
 if [[ ! -d "${BUILD_DIR}/build/iphoneos" ]]; then
   pushd "${BUILD_DIR}"
-  ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared no-dso no-hw no-engine ios64-xcrun -mios-version-min=${IOS_VERSION_MIN}
+  ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared no-tests no-dso no-hw no-engine ios64-xcrun -mios-version-min=${IOS_VERSION_MIN}
   make clean
   make -j$THREAD_COUNT
   mkdir "${BUILD_DIR}/build/iphoneos" 
