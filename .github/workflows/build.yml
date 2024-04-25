@@ -57,6 +57,7 @@ jobs:
       with:
         name: "openssl-${{ env.OPENSSL_VERSION }}"
         retention-days: 5
+        if-no-files-found: "error"
         path: |
           build/openssl-${{ env.OPENSSL_VERSION }}/build/iphoneos/**
           build/openssl-${{ env.OPENSSL_VERSION }}/build/iphonesimulator/**
@@ -67,6 +68,7 @@ jobs:
       with:
         name: "openssl-${{ env.OPENSSL_VERSION }}.xcframework"
         retention-days: 5
+        if-no-files-found: "error"
         path: |
           build/openssl-${{ env.OPENSSL_VERSION }}/build/OpenSSL.xcframework
 
