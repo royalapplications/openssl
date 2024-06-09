@@ -2,7 +2,7 @@
 
 set -e
 
-OPENSSL_VERSION_STABLE="3.2.1" # https://www.openssl.org/source/index.html
+OPENSSL_VERSION_STABLE="3.2.2" # https://www.openssl.org/source/index.html
 IOS_VERSION_MIN="13.4"
 MACOS_VERSION_MIN="11.0"
 CODESIGN_ID="-"
