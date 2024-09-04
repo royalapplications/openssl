@@ -21,8 +21,8 @@ fi
 
 if [[ ! -f "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz" ]]; then
   echo "Downloading openssl-${OPENSSL_VERSION}.tar.gz"
-  curl -fL "https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz" -o "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz"
-  curl -fL "https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz.sha256" -o "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz.sha256"
+  curl -fL "https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz" -o "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz"
+  curl -fL "https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz.sha256" -o "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz.sha256"
   DIGEST=$( cat "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz.sha256" )
 
   if [[ "$(shasum -a 256 "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz" | awk '{ print " "$1}')" != "${DIGEST}" ]]
