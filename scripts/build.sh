@@ -2,7 +2,7 @@
 
 set -e
 
-OPENSSL_VERSION_STABLE="3.3.2" # https://github.com/openssl/openssl/blob/openssl-3.3/CHANGES.md#changes-between-331-and-332-3-sep-2024
+OPENSSL_VERSION_STABLE="3.4.0" # https://openssl-library.org/news/openssl-3.4-notes/#major-changes-between-openssl-33-and-openssl-340-22-oct-2024
 IOS_VERSION_MIN="13.4"
 MACOS_VERSION_MIN="11.0"
 CODESIGN_ID="-"
