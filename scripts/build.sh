@@ -23,8 +23,15 @@ if [[ ! -f "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz" ]]; then
   echo "Downloading openssl-${OPENSSL_VERSION}.tar.gz"
   curl -fL "https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz" -o "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz"
   curl -fL "https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz.sha256" -o "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz.sha256"
-
-  sha256sum --strict --check "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz.sha256"
+  DIGEST_EXPECTED=$( cat "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz.sha256" | awk '{ print " "$1}' )
+  DIGEST_ACTUAL=$( shasum -a 256 "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz" | awk '{ print " "$1}' )
+  
+  if [[ "${DIGEST_EXPECTED}" != "${DIGEST_ACTUAL}" ]]; then
+    echo "openssl-${OPENSSL_VERSION}.tar.gz: checksum mismatch"
+    echo "expected: ${DIGEST_EXPECTED}"
+    echo "found:    ${DIGEST_ACTUAL}"
+    exit 1
+  fi
   rm -f "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz.sha256"
 fi
 
