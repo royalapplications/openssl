@@ -2,7 +2,7 @@
 
 set -e
 
-OPENSSL_VERSION_STABLE="3.4.1" # https://github.com/openssl/openssl/releases/tag/openssl-3.4.1
+OPENSSL_VERSION_STABLE="3.5.0" # https://github.com/openssl/openssl/releases/tag/openssl-3.5.0
 IOS_VERSION_MIN="13.4"
 MACOS_VERSION_MIN="11.0"
 CODESIGN_ID="-"
