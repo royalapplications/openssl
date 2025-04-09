@@ -46,7 +46,7 @@ build_sim_libs()
   local ARCH=$1
   if [[ ! -d "${BUILD_DIR}/build/iphonesimulator-${ARCH}" ]]; then
     pushd "${BUILD_DIR}"
-    ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared no-apps no-docs no-module no-dso no-hw no-engine iossimulator-xcrun CFLAGS="-arch $ARCH -mios-simulator-version-min=${IOS_VERSION_MIN}"
+    ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared no-apps no-docs no-module no-dso no-engine iossimulator-xcrun CFLAGS="-arch $ARCH -mios-simulator-version-min=${IOS_VERSION_MIN}"
     make clean
     make -j$THREAD_COUNT
     mkdir "${BUILD_DIR}/build/iphonesimulator-${ARCH}"
@@ -107,7 +107,7 @@ fi
 
 if [[ ! -d "${BUILD_DIR}/build/iphoneos" ]]; then
   pushd "${BUILD_DIR}"
-  ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared no-apps no-docs no-module no-dso no-hw no-engine ios64-xcrun -mios-version-min=${IOS_VERSION_MIN}
+  ./Configure --openssldir="${BUILD_DIR}/build/ssl" no-asm no-shared no-apps no-docs no-module no-dso no-engine ios64-xcrun -mios-version-min=${IOS_VERSION_MIN}
   make clean
   make -j$THREAD_COUNT
   mkdir "${BUILD_DIR}/build/iphoneos" 
