@@ -25,9 +25,6 @@ if [[ ! -f "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz" ]]; then
   curl -fL "https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz.sha256" -o "${BUILD_ROOT_DIR}/openssl-${OPENSSL_VERSION}.tar.gz.sha256"
 
   pushd "${BUILD_ROOT_DIR}"
-  # `shasum --check` expects exactly two spaces separating digest and filename on macOS -- help it succeed
-  # sed -e 's/ /  /g' "openssl-${OPENSSL_VERSION}.tar.gz.sha256" > "openssl-${OPENSSL_VERSION}.tar.gz.sha256-macOS"
-  # shasum -a 256 --strict --check "openssl-${OPENSSL_VERSION}.tar.gz.sha256-macOS"
   shasum -a 256 --strict --check "openssl-${OPENSSL_VERSION}.tar.gz.sha256"
   popd
 fi
