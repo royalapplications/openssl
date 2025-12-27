@@ -31,11 +31,11 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: restore cache
       id: cache-openssl-src
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         key: "openssl-src-${{ env.OPENSSL_VERSION }}"
         path: |
@@ -46,14 +46,14 @@ jobs:
 
     - name: save cache
       if: "steps.cache-openssl-src.outputs.cache-hit != 'true'"
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         key: "${{ steps.cache-openssl-src.outputs.cache-primary-key }}"
         path: |
           build/openssl-${{ env.OPENSSL_VERSION }}.tar.gz
 
     - name: publish native libraries
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: "openssl-${{ env.OPENSSL_VERSION }}"
         retention-days: 5
@@ -64,7 +64,7 @@ jobs:
           build/openssl-${{ env.OPENSSL_VERSION }}/build/macosx/**
 
     - name: publish xcframework
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: "openssl-${{ env.OPENSSL_VERSION }}.xcframework"
         retention-days: 5
